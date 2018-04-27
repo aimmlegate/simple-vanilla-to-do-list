@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Vanilla to-do list</title>
+  
+  
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <div class='todo'>
+  <form id='input-form' class='input-form'>
+    <div class="control todo-input">
+      <input class="input" type="text" name="text" placeholder="Input here" required>
+    </div>
+    <div class="control">
+      <input type="submit" class="button is-primary" value='Add'></input>
+    </div>
+  </form>
+  <div id='input-content' class='todo-list content'>
+
+  </div>
+  <div class='controls'>
+    <a id='clear-all' class="button is-warning">Delete All</a>
+    <a id='save-json' class="button is-success">Save JSON</a>
+  </div>
+</div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.js'></script>
+
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>

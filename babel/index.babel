@@ -1,0 +1,84 @@
+const inputForm = document.querySelector('#input-form');
+const inputContent = document.querySelector('#input-content');
+const clearAll = document.querySelector('#clear-all');
+const saveJSON = document.querySelector('#save-json');
+
+const toStorage = (data) => {
+  localStorage.setItem('myTodoList', JSON.stringify(data));
+}
+
+const getFromStorage = () => {
+  return JSON.parse(localStorage.getItem('myTodoList'));
+}
+
+const clearStorage = () => {
+  localStorage.clear('myTodoList');
+}
+
+let todoData = getFromStorage() || [];
+
+const renderElement = (element) => {
+  const elementTemplate =
+  `
+    <div class="notification" data-id='${element.id}'>
+      <button class="delete"></button>
+      ${element.text} 
+    </div> 
+  `
+  const newElement = document.createElement('div');
+  newElement.classList.add("todo-item")
+  newElement.innerHTML = elementTemplate;
+  inputContent.appendChild(newElement);
+}
+
+const renderAll = (data) => {
+  data.forEach(el => renderElement(el));
+}
+
+const removeElement = (id) => {
+  const removedEl = document.querySelector(`[data-id='${id}']`).parentElement;
+  inputContent.removeChild(removedEl);
+}
+
+const addHandler = (e) => {
+  const target = e.target;
+  const formData = _.fromPairs([...new FormData(target)]);
+  const newItem = {id: Date.now(), ...formData};
+  todoData = [...todoData, newItem];
+  toStorage(todoData);
+  renderElement(newItem);
+  target.querySelector('.control .input').value = '';
+  e.preventDefault();
+};
+
+const clearHandler = (e) => {
+  const allElementsId = todoData.map(el => el.id);
+  allElementsId.forEach(el => removeElement(el));
+  todoData = [];
+  clearStorage();
+  e.preventDefault();
+}
+
+const removeHandler = (e) => {
+  const target = e.target.parentElement;
+  const elementId = target.dataset.id;
+  todoData = todoData.filter((el) => (!(el.id == elementId)));
+  toStorage(todoData);
+  removeElement(elementId);
+  e.preventDefault();
+}
+
+const saveHandler = (e) => {
+  e.preventDefault();
+  const json = JSON.stringify(todoData);
+  const blob = new Blob([json], {type: "application/json"});
+  const url  = URL.createObjectURL(blob);
+  document.location = url;
+}
+
+inputForm.addEventListener('submit', addHandler);
+inputContent.addEventListener('click', removeHandler);
+clearAll.addEventListener('click', clearHandler);
+saveJSON.addEventListener('click', saveHandler);
+
+renderAll(todoData);
